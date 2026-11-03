@@ -1,0 +1,8 @@
+{
+  "name": "Hoàng Gia Wedding - Bộ Sưu Tập Rạp Cưới & Trang Trí Sự Kiện Trọn Gói",
+  "description": "Website giới thiệu các mẫu rạp cưới đẹp, nhà bạt không gian sang trọng, phóng to ảnh chi tiết khi hover, hiệu ứng cánh hoa rơi lãng mạn và kết nối TikTok.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

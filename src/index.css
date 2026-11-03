@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #FCF9F6;
+    color: #2C2420;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-wedding-serif {
+    font-family: var(--font-serif);
+  }
+}
+
+/* Falling Rose Petals Keyframes */
+@keyframes petalFall {
+  0% {
+    opacity: 0;
+    transform: translate(0, -10vh) rotate(0deg) scale(0.6);
+  }
+  15% {
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tw-petal-drift, 80px), 110vh) rotate(var(--tw-petal-rot, 360deg)) scale(1);
+  }
+}
+
+@keyframes petalSway {
+  0%, 100% {
+    transform: translateX(-15px) rotate(0deg);
+  }
+  50% {
+    transform: translateX(25px) rotate(15deg);
+  }
+}
+
+@keyframes goldShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.animate-gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    #78350F 0%,
+    #B45309 25%,
+    #D97706 50%,
+    #B45309 75%,
+    #78350F 100%
+  );
+  background-size: 200% auto;
+  color: #92400E;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: goldShimmer 5s linear infinite;
+}
+
+/* Glassmorphism for wedding cards */
+.glass-wedding {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(220, 190, 140, 0.28);
+}
+
+.glass-wedding-dark {
+  background: rgba(36, 28, 24, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #F5EFEB;
+}
+::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B38F26;
+}
