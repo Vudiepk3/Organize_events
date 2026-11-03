@@ -6,34 +6,49 @@ import { MarqueeBrandInfo } from '../types/wedding';
 interface VideoShowcaseProps {
   videos: WeddingVideo[];
   brandInfo: MarqueeBrandInfo;
+  selectedIndex?: number;
+  onSelectVideo?: (index: number) => void;
 }
 
 export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
   videos,
   brandInfo,
+  selectedIndex,
+  onSelectVideo,
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [internalIndex, setInternalIndex] = useState(0);
+
+  // Use controlled index if provided, otherwise internal state
+  const currentIndex = selectedIndex !== undefined ? selectedIndex : internalIndex;
+
+  const updateIndex = (newIndex: number) => {
+    if (onSelectVideo) {
+      onSelectVideo(newIndex);
+    } else {
+      setInternalIndex(newIndex);
+    }
+  };
 
   // If no videos available, don't display anything ("nếu ko có thì ko cần hiển thị")
   if (!videos || videos.length === 0) {
     return null;
   }
 
-  const currentVideo = videos[currentIndex];
+  const currentVideo = videos[currentIndex] || videos[0];
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + videos.length) % videos.length);
+    updateIndex((currentIndex - 1 + videos.length) % videos.length);
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % videos.length);
+    updateIndex((currentIndex + 1) % videos.length);
   };
 
   const cleanZaloPhone = brandInfo.zalo.replace(/\D/g, '') || brandInfo.hotline.replace(/\D/g, '') || '0965252888';
   const zaloUrl = `https://zalo.me/${cleanZaloPhone}?text=${encodeURIComponent(`Xin chào, tôi muốn nhận báo giá mẫu rạp trong video: ${currentVideo.title}`)}`;
 
   return (
-    <section className="mt-12 mb-10 pt-8 border-t border-[#EADFD5]">
+    <section className="mb-8">
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
         <div>
@@ -166,7 +181,7 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
                 {videos.map((_, idx) => (
                   <button
                     key={idx}
-                    onClick={() => setCurrentIndex(idx)}
+                    onClick={() => updateIndex(idx)}
                     className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                       idx === currentIndex
                         ? 'bg-amber-500 text-stone-950 font-bold shadow-md shadow-amber-500/30'

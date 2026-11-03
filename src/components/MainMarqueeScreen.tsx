@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
-import { Sparkles, MapPin, Phone, CheckCircle2 } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Sparkles, MapPin, Phone, CheckCircle2, Video } from 'lucide-react';
 import { MarqueeBrandInfo, MarqueeCategory, WeddingPhoto } from '../types/wedding';
 import { WeddingVideo } from '../utils/loadVideos';
 import { PhotoCard } from './PhotoCard';
+import { VideoCard } from './VideoCard';
 import { VideoShowcase } from './VideoShowcase';
 
 interface MainMarqueeScreenProps {
@@ -22,6 +23,10 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
   onSelectCategory,
   onOpenLightbox,
 }) => {
+  // Primary Tab state: 'photos' (Mẫu Rạp Cưới & Ăn Hỏi) vs 'videos' (Video Thực Tế)
+  const [activeMainTab, setActiveMainTab] = useState<'photos' | 'videos'>('photos');
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState<number>(0);
+
   const filteredPhotos = useMemo(() => {
     if (selectedCategory === 'all') return photos;
     return photos.filter((p) => p.category === selectedCategory);
@@ -34,9 +39,18 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
     ? brandInfo.serviceAreas 
     : ['Bắc Hà', 'Mường Mương', 'Bảo Thắng', 'Si Ma Cai', 'TP. Lào Cai'];
 
+  const handleSelectVideoFromGrid = (index: number) => {
+    setSelectedVideoIndex(index);
+    // Smooth scroll up toward the cinema video player
+    const playerElement = document.getElementById('cinema-video-player');
+    if (playerElement) {
+      playerElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <main className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-6 sm:py-10">
-      {/* Editorial Title & Brand Header */}
+      {/* Editorial Title & Brand Header - GIỮ NGUYÊN PHẦN TRÊN THEO YÊU CẦU */}
       <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
         <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-amber-800 mb-2 bg-amber-50 px-3 py-1 rounded-full border border-amber-200/60">
           <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0" />
@@ -52,7 +66,7 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
           Rê chuột hoặc chạm vào ảnh để <strong className="text-stone-900 font-semibold">phóng to chi tiết</strong> và bấm nút <strong className="text-[#0068FF] font-semibold">"Nhận Báo Giá Rạp Cưới"</strong> để kết nối trực tiếp qua Zalo.
         </p>
 
-        {/* Prominent Service Area & Contact Highlight Card (Yêu Cầu Trọng Tâm Của Khách Hàng) */}
+        {/* Prominent Service Area & Contact Highlight Card */}
         <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-amber-50/80 via-white to-amber-50/40 border-2 border-amber-300/80 shadow-sm text-left mb-7">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-amber-200/60 text-xs">
             {/* Địa chỉ cơ sở chính */}
@@ -80,7 +94,7 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
             </a>
           </div>
 
-          {/* Các khu vực phục vụ nổi bật (Bắc Hà, Mường Mương, Bảo Thắng, Si Ma Cai, TP Lào Cai) */}
+          {/* Các khu vực phục vụ nổi bật */}
           <div className="pt-3">
             <div className="flex items-center gap-1.5 text-xs text-amber-900 font-bold uppercase tracking-wider mb-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
@@ -104,62 +118,151 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
           </div>
         </div>
 
-        {/* Category Switcher Tabs - Responsive Grid on Mobile */}
-        <div className="w-full max-w-md mx-auto">
-          <div className="grid grid-cols-3 gap-1 p-1 bg-stone-100 rounded-2xl border border-stone-200/90 shadow-xs">
+        {/* 2 PRIMARY TABS: [Tab 1: Mẫu Rạp Cưới & Ăn Hỏi (Ảnh)] vs [Tab 2: Video Thực Tế Công Trình] */}
+        <div className="flex items-center justify-center mb-6">
+          <div className="grid grid-cols-2 p-1.5 bg-stone-200/90 rounded-2xl border border-stone-300/80 shadow-sm max-w-lg w-full">
             <button
-              onClick={() => onSelectCategory('all')}
-              className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${
-                selectedCategory === 'all'
-                  ? 'bg-stone-900 text-white shadow-md'
-                  : 'text-stone-600 hover:text-stone-900'
+              type="button"
+              onClick={() => setActiveMainTab('photos')}
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+                activeMainTab === 'photos'
+                  ? 'bg-amber-600 text-white shadow-md shadow-amber-900/20 ring-1 ring-amber-400'
+                  : 'text-stone-700 hover:text-stone-950 hover:bg-white/60'
               }`}
             >
-              Tất Cả ({photos.length})
+              <Sparkles className="w-4 h-4 text-amber-200 shrink-0" />
+              <span className="truncate">Mẫu Rạp Cưới</span>
+              <span
+                className={`px-2 py-0.5 rounded-full text-[11px] font-mono shrink-0 ${
+                  activeMainTab === 'photos' ? 'bg-black/25 text-white' : 'bg-stone-300/80 text-stone-700'
+                }`}
+              >
+                {photos.length}
+              </span>
             </button>
 
             <button
-              onClick={() => onSelectCategory('dam-cuoi')}
-              className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${
-                selectedCategory === 'dam-cuoi'
-                  ? 'bg-amber-700 text-white shadow-md'
-                  : 'text-stone-600 hover:text-stone-900'
+              type="button"
+              onClick={() => setActiveMainTab('videos')}
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+                activeMainTab === 'videos'
+                  ? 'bg-stone-900 text-white shadow-md shadow-black/25 ring-1 ring-stone-700'
+                  : 'text-stone-700 hover:text-stone-950 hover:bg-white/60'
               }`}
             >
-              Rạp Cưới ({weddingCount})
-            </button>
-
-            <button
-              onClick={() => onSelectCategory('an-hoi')}
-              className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${
-                selectedCategory === 'an-hoi'
-                  ? 'bg-rose-700 text-white shadow-md'
-                  : 'text-stone-600 hover:text-stone-900'
-              }`}
-            >
-              Rạp Ăn Hỏi ({engagementCount})
+              <Video className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="truncate">Video Thực Tế</span>
+              <span className="px-2 py-0.5 rounded-full text-[11px] font-mono shrink-0 bg-rose-600 text-white flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                {videos.length}
+              </span>
             </button>
           </div>
         </div>
+
+        {/* TAB 1 SUB-CATEGORIES: Only visible when activeMainTab is 'photos' */}
+        {activeMainTab === 'photos' && (
+          <div className="w-full max-w-md mx-auto animate-fadeIn">
+            <div className="grid grid-cols-3 gap-1 p-1 bg-stone-100 rounded-2xl border border-stone-200/90 shadow-xs">
+              <button
+                onClick={() => onSelectCategory('all')}
+                className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${
+                  selectedCategory === 'all'
+                    ? 'bg-stone-900 text-white shadow-md'
+                    : 'text-stone-600 hover:text-stone-900'
+                }`}
+              >
+                Tất Cả ({photos.length})
+              </button>
+
+              <button
+                onClick={() => onSelectCategory('dam-cuoi')}
+                className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${
+                  selectedCategory === 'dam-cuoi'
+                    ? 'bg-amber-700 text-white shadow-md'
+                    : 'text-stone-600 hover:text-stone-900'
+                }`}
+              >
+                Rạp Cưới ({weddingCount})
+              </button>
+
+              <button
+                onClick={() => onSelectCategory('an-hoi')}
+                className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${
+                  selectedCategory === 'an-hoi'
+                    ? 'bg-rose-700 text-white shadow-md'
+                    : 'text-stone-600 hover:text-stone-900'
+                }`}
+              >
+                Rạp Ăn Hỏi ({engagementCount})
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Grid of Marquee Photos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
-        {filteredPhotos.map((photo) => (
-          <PhotoCard
-            key={photo.id}
-            photo={photo}
-            zaloPhone={brandInfo.zalo || brandInfo.hotline}
-            onOpenLightbox={onOpenLightbox}
-          />
-        ))}
-      </div>
+      {/* ===================== TAB 1 CONTENT: PHOTOS GRID ===================== */}
+      {activeMainTab === 'photos' && (
+        <section aria-label="Danh sách mẫu rạp cưới và ăn hỏi" className="animate-fadeIn">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
+            {filteredPhotos.map((photo) => (
+              <PhotoCard
+                key={photo.id}
+                photo={photo}
+                zaloPhone={brandInfo.zalo || brandInfo.hotline}
+                onOpenLightbox={onOpenLightbox}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
-      {/* Video Showcase Section: Displays local videos from /src/assets/videos/ or fallback TikTok/YouTube */}
-      <VideoShowcase
-        videos={videos}
-        brandInfo={brandInfo}
-      />
+      {/* ===================== TAB 2 CONTENT: VIDEO THỰC TẾ ===================== */}
+      {activeMainTab === 'videos' && (
+        <section aria-label="Video thực tế thi công rạp cưới" className="animate-fadeIn">
+          {/* Main Cinema Video Showcase with 2 side buttons */}
+          <div id="cinema-video-player">
+            <VideoShowcase
+              videos={videos}
+              brandInfo={brandInfo}
+              selectedIndex={selectedVideoIndex}
+              onSelectVideo={setSelectedVideoIndex}
+            />
+          </div>
+
+          {/* List of Real Videos (Grid Layout like the Photos in Tab 1) */}
+          <div className="mt-8 pt-8 border-t border-[#EADFD5]">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
+              <div>
+                <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-amber-800 mb-1.5 bg-amber-50 px-3 py-1 rounded-full border border-amber-200/60">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Bộ Sưu Tập Video Thi Công</span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-serif font-bold text-stone-900">
+                  Danh Sách Tất Cả Video Thực Tế ({videos.length})
+                </h2>
+                <p className="text-xs sm:text-sm text-stone-500 mt-1">
+                  Chạm vào bất kỳ video nào dưới đây để phát trên màn hình lớn hoặc bấm nút Báo Giá qua Zalo
+                </p>
+              </div>
+            </div>
+
+            {/* Video Cards Grid matching the 3-column layout of the Photos Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
+              {videos.map((vid, idx) => (
+                <VideoCard
+                  key={vid.id || idx}
+                  video={vid}
+                  index={idx}
+                  isActive={idx === selectedVideoIndex}
+                  zaloPhone={brandInfo.zalo || brandInfo.hotline}
+                  onSelectVideo={handleSelectVideoFromGrid}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 };
