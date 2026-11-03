@@ -77,6 +77,27 @@ export const EditBrandModal: React.FC<EditBrandModalProps> = ({
           </div>
 
           {/* TikTok URL (Yêu cầu chính từ khách) */}
+          {/* Tip for image folders */}
+          <div className="p-3.5 bg-amber-50/80 rounded-xl border border-amber-200/70 text-xs text-amber-950 space-y-1">
+            <div className="font-semibold text-amber-900 flex items-center gap-1.5">
+              <span>📁</span>
+              <span>Quản lý ảnh theo 2 thư mục riêng biệt:</span>
+            </div>
+            <p className="text-[11px] text-stone-700 leading-relaxed">
+              Bạn có thể thả hàng loạt ảnh vào 2 thư mục mà <strong>không cần phải đổi tên ảnh</strong>:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
+              <div className="bg-white/80 p-2 rounded-lg border border-amber-100 font-mono text-[10px]">
+                <span className="font-semibold text-amber-800 block">/src/assets/images/rap-dam-cuoi/</span>
+                <span className="text-stone-500 font-sans">Mọi ảnh rạp cưới (tên bất kỳ)</span>
+              </div>
+              <div className="bg-white/80 p-2 rounded-lg border border-amber-100 font-mono text-[10px]">
+                <span className="font-semibold text-rose-800 block">/src/assets/images/rap-an-hoi/</span>
+                <span className="text-stone-500 font-sans">Mọi ảnh rạp ăn hỏi, gia tiên</span>
+              </div>
+            </div>
+          </div>
+
           <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-3">
             <div className="flex items-center gap-2 text-xs font-semibold text-stone-900">
               {/* TikTok icon */}
