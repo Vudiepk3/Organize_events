@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Play, Video, Sparkles, MapPin, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Video, Sparkles, MapPin, ExternalLink } from 'lucide-react';
 import { WeddingVideo } from '../utils/loadVideos';
 import { MarqueeBrandInfo } from '../types/wedding';
 
@@ -49,7 +49,7 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
           </p>
         </div>
 
-        {/* Carousel Navigation Buttons */}
+        {/* Carousel Navigation Indicator in Header */}
         <div className="flex items-center gap-2 shrink-0">
           <span className="text-xs font-mono font-semibold text-stone-500 mr-1">
             {currentIndex + 1} / {videos.length}
@@ -58,6 +58,7 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
             onClick={handlePrev}
             className="p-2 sm:p-2.5 rounded-xl bg-white hover:bg-stone-100 text-stone-800 border border-stone-200 shadow-xs transition-all hover:scale-105 cursor-pointer"
             title="Video trước"
+            aria-label="Video trước"
           >
             <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
@@ -65,6 +66,7 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
             onClick={handleNext}
             className="p-2 sm:p-2.5 rounded-xl bg-white hover:bg-stone-100 text-stone-800 border border-stone-200 shadow-xs transition-all hover:scale-105 cursor-pointer"
             title="Video tiếp theo"
+            aria-label="Video tiếp theo"
           >
             <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
@@ -73,8 +75,8 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
 
       {/* Main Video Cinema Container */}
       <div className="bg-stone-950 rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-amber-400/40 shadow-xl flex flex-col lg:flex-row">
-        {/* Left: Video Player */}
-        <div className="relative flex-1 aspect-video lg:aspect-auto lg:min-h-[420px] bg-black flex items-center justify-center">
+        {/* Left: Video Player with 2 prominent navigation buttons on left and right */}
+        <div className="relative flex-1 aspect-video lg:aspect-auto lg:min-h-[440px] bg-black flex items-center justify-center group">
           {currentVideo.type === 'local' ? (
             <video
               key={currentVideo.src}
@@ -94,66 +96,101 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
             />
           )}
 
-          {/* Quick Prev / Next Floating Arrows on Video for Mobile */}
+          {/* Left Navigation Button - Prominent on the left side of video */}
           <button
             onClick={handlePrev}
-            className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/60 text-white hover:bg-black/80 transition-opacity lg:hidden cursor-pointer"
+            aria-label="Video trước"
+            className="absolute left-2.5 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-stone-900/85 hover:bg-amber-600 text-white border-2 border-white/40 hover:border-amber-300 shadow-2xl backdrop-blur-md flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-400"
+            title="Xem video trước"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 -ml-0.5" />
           </button>
+
+          {/* Right Navigation Button - Prominent on the right side of video */}
           <button
             onClick={handleNext}
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/60 text-white hover:bg-black/80 transition-opacity lg:hidden cursor-pointer"
+            aria-label="Video tiếp theo"
+            className="absolute right-2.5 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-stone-900/85 hover:bg-amber-600 text-white border-2 border-white/40 hover:border-amber-300 shadow-2xl backdrop-blur-md flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-400"
+            title="Xem video tiếp theo"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 -mr-0.5" />
           </button>
+
+          {/* Bottom badge overlay indicating current video index */}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none px-3.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-white/95 text-xs font-semibold tracking-wide flex items-center gap-2">
+            <span>Video {currentIndex + 1} / {videos.length}</span>
+            <div className="flex items-center gap-1">
+              {videos.map((_, idx) => (
+                <span
+                  key={idx}
+                  className={`inline-block rounded-full transition-all ${
+                    idx === currentIndex
+                      ? 'w-4 h-1.5 bg-amber-400'
+                      : 'w-1.5 h-1.5 bg-white/40'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Right: Video Information & Direct Action Buttons */}
+        {/* Right: Clean Video Information & Direct Action Buttons (No broken thumbnails) */}
         <div className="w-full lg:w-96 p-5 sm:p-6 bg-gradient-to-b from-[#1C1714] to-[#120E0C] text-white flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-white/10">
           <div>
-            <div className="flex items-center gap-1.5 text-xs text-amber-400 font-semibold mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>{currentVideo.location || 'Lào Cai'}</span>
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-amber-400" />
+                Video #{currentIndex + 1}
+              </span>
+              <span className="text-xs text-stone-300 flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                {currentVideo.location || 'Lào Cai'}
+              </span>
             </div>
 
             <h3 className="text-lg sm:text-xl font-serif font-bold text-white mb-2 leading-snug">
               {currentVideo.title}
             </h3>
 
-            <p className="text-xs sm:text-sm text-stone-300 leading-relaxed mb-6">
+            <p className="text-xs sm:text-sm text-stone-300 leading-relaxed mb-5">
               {currentVideo.description}
             </p>
 
-            {/* Thumbnail Selector Strip */}
-            <div className="mb-6">
-              <div className="text-[11px] font-semibold uppercase tracking-wider text-stone-400 mb-2">
-                Chọn video khác:
+            {/* Quick Switch Dots & Instruction */}
+            <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 mb-5">
+              <div className="flex items-center justify-between text-xs mb-2">
+                <span className="text-stone-300 font-medium">Chuyển đổi video:</span>
+                <span className="text-amber-400 font-semibold">{currentIndex + 1} / {videos.length}</span>
               </div>
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                {videos.map((vid, idx) => (
+              <div className="flex items-center gap-2">
+                {videos.map((_, idx) => (
                   <button
-                    key={vid.id}
+                    key={idx}
                     onClick={() => setCurrentIndex(idx)}
-                    className={`relative w-20 h-14 rounded-lg overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
+                    className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                       idx === currentIndex
-                        ? 'border-amber-400 scale-105 shadow-md'
-                        : 'border-white/20 opacity-60 hover:opacity-100'
+                        ? 'bg-amber-500 text-stone-950 font-bold shadow-md shadow-amber-500/30'
+                        : 'bg-white/10 text-stone-300 hover:bg-white/20'
                     }`}
+                    title={`Chuyển sang Video ${idx + 1}`}
                   >
-                    {vid.thumbnail ? (
-                      <img src={vid.thumbnail} alt={vid.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full bg-stone-800 flex items-center justify-center text-stone-400">
-                        <Play className="w-4 h-4" />
-                      </div>
-                    )}
-                    <span className="absolute bottom-1 right-1 text-[9px] bg-black/80 text-white px-1 rounded">
-                      #{idx + 1}
-                    </span>
+                    Video {idx + 1}
                   </button>
                 ))}
               </div>
+              <p className="text-[11px] text-stone-400 mt-2 text-center">
+                Bấm 2 nút mũi tên ở 2 bên video để lướt xem nhanh
+              </p>
+            </div>
+
+            {/* Service Areas Note */}
+            <div className="mb-4 text-xs text-stone-300 bg-black/30 p-3 rounded-lg border border-white/5">
+              <span className="text-amber-400 font-semibold block mb-1">Khu vực phục vụ thi công:</span>
+              <span>
+                {brandInfo.serviceAreas && brandInfo.serviceAreas.length > 0
+                  ? brandInfo.serviceAreas.join(' • ')
+                  : 'Bản Lầu • Bắc Hà • Mường Mương • Bảo Thắng • Si Ma Cai • TP. Lào Cai'}
+              </span>
             </div>
           </div>
 
@@ -164,7 +201,7 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
               href={zaloUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-3 bg-[#0068FF] hover:bg-[#0052cc] text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3 bg-[#0068FF] hover:bg-[#0052cc] text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer hover:shadow-blue-500/25"
             >
               <span className="bg-white text-[#0068FF] px-1.5 py-0.5 rounded font-extrabold text-[10px]">
                 Zalo
