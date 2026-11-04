@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
                 {brandInfo.brandName}
               </span>
               <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-amber-700 font-semibold truncate">
-                Bản Lầu · Lào Cai
+                {brandInfo.address || 'Bản Lầu · Lào Cai'}
               </span>
             </div>
           </a>

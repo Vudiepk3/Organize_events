@@ -45,6 +45,8 @@ export const FALLBACK_WEDDING_VIDEOS: WeddingVideo[] = [
   },
 ];
 
+import { SERVICE_AREAS } from '../config/siteConfig';
+
 export function getWeddingVideos(): WeddingVideo[] {
   const localEntries = Object.entries(localVideoModules);
 
@@ -54,6 +56,9 @@ export function getWeddingVideos(): WeddingVideo[] {
       const fileName = filePath.split('/').pop() || `Video ${idx + 1}`;
       const cleanName = fileName.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
 
+      // Tự động gán địa điểm từ danh sách khu vực phục vụ trung tâm (SERVICE_AREAS)
+      const assignedLocation = SERVICE_AREAS[idx % (SERVICE_AREAS.length || 1)] || 'Lào Cai';
+
       return {
         id: `local-vid-${idx}`,
         title: cleanName.toUpperCase().includes('AN HOI')
@@ -62,7 +67,7 @@ export function getWeddingVideos(): WeddingVideo[] {
         description: 'Video ghi lại trực tiếp quá trình thi công và bàn giao rạp cưới thực tế của Nhà Rạp Sơn Nụ.',
         type: 'local',
         src: moduleExport.default || filePath,
-        location: 'Tỉnh Lào Cai',
+        location: assignedLocation,
       };
     });
   }

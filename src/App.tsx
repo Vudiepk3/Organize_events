@@ -19,6 +19,19 @@ export default function App() {
   // Brand info state - lấy trực tiếp từ src/config/siteConfig.ts làm nguồn cấu hình duy nhất
   const [brandInfo] = useState<MarqueeBrandInfo>(SITE_BRAND_INFO);
 
+  // Tự động đồng bộ tiêu đề trang web và thẻ meta khi danh sách địa điểm thay đổi
+  React.useEffect(() => {
+    const areasStr = (brandInfo.serviceAreas || []).join(', ');
+    document.title = `${brandInfo.brandName} - Rạp Cưới & Ăn Hỏi (${areasStr})`;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        `${brandInfo.brandName} tại ${brandInfo.address}. Chuyên thi công rạp đám cưới, rạp ăn hỏi tại ${areasStr}. Hotline/Zalo: ${brandInfo.hotline}.`
+      );
+    }
+  }, [brandInfo]);
+
   // Đọc danh sách ảnh trực tiếp từ JSON URL để tăng tốc độ hiển thị và giảm lag
   const photos = useMemo(() => {
     return getWeddingPhotos();
