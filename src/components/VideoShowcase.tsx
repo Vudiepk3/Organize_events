@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Video, Sparkles, MapPin, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Video, Sparkles, ExternalLink } from 'lucide-react';
 import { WeddingVideo } from '../utils/loadVideos';
 import { MarqueeBrandInfo } from '../types/wedding';
 import { SERVICE_AREAS } from '../config/siteConfig';
@@ -157,10 +157,6 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-amber-400" />
                 Video #{currentIndex + 1}
-              </span>
-              <span className="text-xs text-stone-300 flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                {currentVideo.location || 'Lào Cai'}
               </span>
             </div>
 

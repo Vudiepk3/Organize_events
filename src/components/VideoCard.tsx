@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Sparkles, MapPin, ExternalLink } from 'lucide-react';
+import { Play, Sparkles } from 'lucide-react';
 import { WeddingVideo } from '../utils/loadVideos';
 
 interface VideoCardProps {
@@ -66,12 +66,6 @@ export const VideoCard: React.FC<VideoCardProps> = ({
         <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-500 text-stone-950 shadow-md flex items-center gap-1 z-10">
           <Sparkles className="w-3 h-3 text-stone-950" />
           <span>Video #{index + 1}</span>
-        </div>
-
-        {/* Location Badge (Top-Right) */}
-        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg text-[11px] font-medium bg-black/70 backdrop-blur-md text-white border border-white/20 flex items-center gap-1 z-10">
-          <MapPin className="w-3 h-3 text-amber-400" />
-          <span>{video.location || 'Lào Cai'}</span>
         </div>
 
         {/* Center Play Button Overlay */}
