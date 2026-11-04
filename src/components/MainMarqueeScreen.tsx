@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
-import { Sparkles, MapPin, Phone, CheckCircle2, Video } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Sparkles, MapPin, Phone, CheckCircle2, Video, ChevronDown } from 'lucide-react';
 import { MarqueeBrandInfo, MarqueeCategory, WeddingPhoto } from '../types/wedding';
 import { WeddingVideo } from '../utils/loadVideos';
 import { PhotoCard } from './PhotoCard';
 import { VideoCard } from './VideoCard';
 import { VideoShowcase } from './VideoShowcase';
+import { SERVICE_AREAS } from '../config/siteConfig';
 
 interface MainMarqueeScreenProps {
   photos: WeddingPhoto[];
@@ -26,18 +27,30 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
   // Primary Tab state: 'photos' (Mẫu Rạp Cưới & Ăn Hỏi) vs 'videos' (Video Thực Tế)
   const [activeMainTab, setActiveMainTab] = useState<'photos' | 'videos'>('photos');
   const [selectedVideoIndex, setSelectedVideoIndex] = useState<number>(0);
+  
+  // Progressive display to avoid rendering hundreds of items at once (zero lag)
+  const [visibleCount, setVisibleCount] = useState<number>(12);
+
+  // Reset pagination when category or tab changes
+  useEffect(() => {
+    setVisibleCount(12);
+  }, [selectedCategory, activeMainTab]);
 
   const filteredPhotos = useMemo(() => {
     if (selectedCategory === 'all') return photos;
     return photos.filter((p) => p.category === selectedCategory);
   }, [photos, selectedCategory]);
 
+  const visiblePhotos = useMemo(() => {
+    return filteredPhotos.slice(0, visibleCount);
+  }, [filteredPhotos, visibleCount]);
+
   const weddingCount = photos.filter((p) => p.category === 'dam-cuoi').length;
   const engagementCount = photos.filter((p) => p.category === 'an-hoi').length;
 
   const serviceAreas = brandInfo.serviceAreas && brandInfo.serviceAreas.length > 0
     ? brandInfo.serviceAreas
-    : ['Bắc Hà', 'Mường Mương', 'Bảo Thắng', 'Si Ma Cai', 'TP. Lào Cai'];
+    : SERVICE_AREAS;
 
   const handleSelectVideoFromGrid = (index: number) => {
     setSelectedVideoIndex(index);
@@ -195,16 +208,44 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
       {/* ===================== TAB 1 CONTENT: PHOTOS GRID ===================== */}
       {activeMainTab === 'photos' && (
         <section aria-label="Danh sách mẫu rạp cưới và ăn hỏi" className="animate-fadeIn">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
-            {filteredPhotos.map((photo) => (
-              <PhotoCard
-                key={photo.id}
-                photo={photo}
-                zaloPhone={brandInfo.zalo || brandInfo.hotline}
-                onOpenLightbox={onOpenLightbox}
-              />
-            ))}
-          </div>
+          {visiblePhotos.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
+                {visiblePhotos.map((photo) => (
+                  <PhotoCard
+                    key={photo.id}
+                    photo={photo}
+                    zaloPhone={brandInfo.zalo || brandInfo.hotline}
+                    onOpenLightbox={onOpenLightbox}
+                  />
+                ))}
+              </div>
+
+              {/* Load More Button if more photos exist */}
+              {visibleCount < filteredPhotos.length ? (
+                <div className="mt-10 sm:mt-12 text-center">
+                  <button
+                    type="button"
+                    onClick={() => setVisibleCount((prev) => prev + 12)}
+                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer hover:scale-102"
+                  >
+                    <ChevronDown className="w-4 h-4 animate-bounce" />
+                    <span>
+                      Xem Thêm Mẫu Rạp Khác (Đã xem {visiblePhotos.length} / {filteredPhotos.length} mẫu)
+                    </span>
+                  </button>
+                </div>
+              ) : filteredPhotos.length > 12 ? (
+                <div className="mt-8 text-center text-xs text-stone-500 font-medium">
+                  ✓ Đã hiển thị đầy đủ tất cả {filteredPhotos.length} mẫu rạp trong danh mục này.
+                </div>
+              ) : null}
+            </>
+          ) : (
+            <div className="text-center py-16 bg-white rounded-2xl border border-stone-200">
+              <p className="text-stone-500 text-sm">Chưa có ảnh nào trong mục này.</p>
+            </div>
+          )}
         </section>
       )}
 

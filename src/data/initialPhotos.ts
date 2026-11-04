@@ -1,17 +1,6 @@
-import { MarqueeBrandInfo, WeddingPhoto } from '../types/wedding';
+import { WeddingPhoto } from '../types/wedding';
+export { DEFAULT_BRAND_INFO, SITE_BRAND_INFO, SERVICE_AREAS } from '../config/siteConfig';
 
-export const DEFAULT_BRAND_INFO: MarqueeBrandInfo = {
-  brandName: 'Nhà Rạp Sơn Nụ',
-  slogan: 'Nâng tầm hôn lễ · Dệt trọn yêu thương',
-  tiktokUrl: 'https://www.tiktok.com/@nharapsonnu',
-  tiktokHandle: '@nharapsonnu',
-  hotline: '0965.252.888',
-  zalo: '0965252888',
-  address: 'Xã Bản Lầu, Tỉnh Lào Cai',
-  serviceAreas: ['Bắc Hà', 'Mường Mương', 'Bảo Thắng', 'Si Ma Cai', 'TP. Lào Cai'],
-  experienceYears: 12,
-  completedWeddings: 1850,
-};
 
 export const INITIAL_WEDDING_PHOTOS: WeddingPhoto[] = [
   {

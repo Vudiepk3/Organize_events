@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Video, Sparkles, MapPin, ExternalLink } from 'lucide-react';
 import { WeddingVideo } from '../utils/loadVideos';
 import { MarqueeBrandInfo } from '../types/wedding';
+import { SERVICE_AREAS } from '../config/siteConfig';
 
 interface VideoShowcaseProps {
   videos: WeddingVideo[];
@@ -45,7 +46,7 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
   };
 
   const cleanZaloPhone = brandInfo.zalo.replace(/\D/g, '') || brandInfo.hotline.replace(/\D/g, '') || '0965252888';
-  const zaloUrl = `https://zalo.me/${cleanZaloPhone}?text=${encodeURIComponent(`Xin chào, tôi muốn nhận báo giá mẫu rạp trong video: ${currentVideo.title}`)}`;
+  const zaloUrl = `https://zalo.me/${cleanZaloPhone}?text=${encodeURIComponent(`Xin chào Nhà Rạp Sơn Nụ, tôi muốn nhận báo giá mẫu rạp trong Video #${currentIndex + 1}`)}`;
 
   return (
     <section className="mb-8">
@@ -163,14 +164,6 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
               </span>
             </div>
 
-            <h3 className="text-lg sm:text-xl font-serif font-bold text-white mb-2 leading-snug">
-              {currentVideo.title}
-            </h3>
-
-            <p className="text-xs sm:text-sm text-stone-300 leading-relaxed mb-5">
-              {currentVideo.description}
-            </p>
-
             {/* Quick Switch Dots & Instruction */}
             <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 mb-5">
               <div className="flex items-center justify-between text-xs mb-2">
@@ -202,9 +195,10 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
             <div className="mb-4 text-xs text-stone-300 bg-black/30 p-3 rounded-lg border border-white/5">
               <span className="text-amber-400 font-semibold block mb-1">Khu vực phục vụ thi công:</span>
               <span>
-                {brandInfo.serviceAreas && brandInfo.serviceAreas.length > 0
-                  ? brandInfo.serviceAreas.join(' • ')
-                  : 'Bản Lầu • Bắc Hà • Mường Mương • Bảo Thắng • Si Ma Cai • TP. Lào Cai'}
+                {(brandInfo.serviceAreas && brandInfo.serviceAreas.length > 0
+                  ? brandInfo.serviceAreas
+                  : SERVICE_AREAS
+                ).join(' • ')}
               </span>
             </div>
           </div>

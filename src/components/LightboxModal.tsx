@@ -97,7 +97,7 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
 
   // Direct Zalo Intent
   const cleanZaloPhone = brandInfo.zalo.replace(/\D/g, '') || brandInfo.hotline.replace(/\D/g, '');
-  const zaloUrl = `https://zalo.me/${cleanZaloPhone}?text=${encodeURIComponent(`Xin chào, tôi muốn nhận báo giá mẫu: ${photo.title}`)}`;
+  const zaloUrl = `https://zalo.me/${cleanZaloPhone}?text=${encodeURIComponent(`Xin chào, tôi muốn nhận báo giá mẫu rạp ${photo.categoryName} (Mã: ${photo.id})`)}`;
 
   const handleOpenZalo = () => {
     window.open(zaloUrl, '_blank', 'noopener,noreferrer');
@@ -108,13 +108,10 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
       {/* Sleek Top Header */}
       <div className="w-full px-4 sm:px-6 py-3.5 flex items-center justify-between text-white border-b border-white/10 bg-black/60 z-30">
         <div className="flex items-center gap-3">
-          <span className="font-serif font-bold text-base sm:text-lg text-white truncate max-w-xs sm:max-w-md">
-            {photo.title}
-          </span>
-          <span className="text-xs text-amber-400 font-medium px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/20 hidden sm:inline">
+          <span className="text-xs text-amber-400 font-semibold px-2.5 py-1 rounded-lg bg-amber-400/10 border border-amber-400/20">
             {photo.categoryName}
           </span>
-          <span className="text-xs text-stone-400 hidden md:inline">
+          <span className="text-xs text-stone-400">
             ({currentIndex + 1} / {photos.length})
           </span>
         </div>
@@ -175,6 +172,9 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
         <img
           src={photo.imageUrl}
           alt={photo.title}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80';
+          }}
           className="max-h-[76vh] max-w-[96vw] object-contain rounded-xl shadow-2xl transition-transform duration-100 ease-out pointer-events-none"
           style={{
             transform: `scale(${zoomLevel}) translate(${pan.x / zoomLevel}px, ${pan.y / zoomLevel}px)`,
@@ -218,7 +218,11 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
               <img
                 src={item.imageUrl}
                 alt={item.title}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=70';
+                }}
                 className="w-full h-full object-cover"
+                loading="lazy"
                 referrerPolicy="no-referrer"
               />
             </button>

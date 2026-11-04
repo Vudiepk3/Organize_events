@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Settings, Heart, Disc, Phone } from 'lucide-react';
+import { Sparkles, Disc } from 'lucide-react';
 import { MarqueeBrandInfo } from '../types/wedding';
 
 interface HeaderProps {
@@ -8,7 +8,6 @@ interface HeaderProps {
   onTogglePetals: () => void;
   musicPlaying: boolean;
   onToggleMusic: () => void;
-  onOpenEditBrand: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -17,7 +16,6 @@ export const Header: React.FC<HeaderProps> = ({
   onTogglePetals,
   musicPlaying,
   onToggleMusic,
-  onOpenEditBrand,
 }) => {
   const cleanZaloPhone = brandInfo.zalo.replace(/\D/g, '') || brandInfo.hotline.replace(/\D/g, '');
   const zaloUrl = `https://zalo.me/${cleanZaloPhone}`;
@@ -42,9 +40,9 @@ export const Header: React.FC<HeaderProps> = ({
           </a>
         </div>
 
-        {/* Right Controls: Bật Nhạc, TikTok Redirect, Zalo & Cài Đặt */}
+        {/* Right Controls: Bật Nhạc, TikTok Redirect & Zalo Báo Giá */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          {/* Wedding Music Player Button (Mobile friendly) */}
+          {/* Wedding Music Player Button */}
           <button
             onClick={onToggleMusic}
             title={musicPlaying ? 'Tạm dừng nhạc cưới' : 'Bật nhạc cưới lãng mạn'}
@@ -99,15 +97,6 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
             <span className="hidden sm:inline">Báo Giá</span>
           </a>
-
-          {/* Edit Brand Settings */}
-          <button
-            onClick={onOpenEditBrand}
-            title="Đổi tên nhà rạp, link TikTok & số Zalo"
-            className="p-1.5 sm:p-2 text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-xl transition-colors cursor-pointer shrink-0"
-          >
-            <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </button>
         </div>
       </div>
     </header>

@@ -11,16 +11,18 @@ export type MarqueeCategory =
 
 export interface WeddingPhoto {
   id: string;
-  title: string;
+  name?: string;
+  title?: string;
   category: MarqueeCategory;
   categoryName: string;
+  url?: string;
   imageUrl: string;
-  dimensions: string;
-  capacity: string;
-  styleTone: string;
-  lighting: string;
-  features: string[];
-  description: string;
+  dimensions?: string;
+  capacity?: string;
+  styleTone?: string;
+  lighting?: string;
+  features?: string[];
+  description?: string;
   isPopular?: boolean;
 }
 

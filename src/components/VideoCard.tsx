@@ -19,7 +19,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({
 }) => {
   const cleanZaloPhone = zaloPhone.replace(/\D/g, '') || '0965252888';
   const zaloUrl = `https://zalo.me/${cleanZaloPhone}?text=${encodeURIComponent(
-    `Xin chào Nhà Rạp Sơn Nụ, tôi muốn nhận tư vấn & báo giá mẫu rạp trong video: ${video.title}`
+    `Xin chào Nhà Rạp Sơn Nụ, tôi muốn nhận tư vấn & báo giá mẫu rạp trong Video #${index + 1}`
   )}`;
 
   const handleZaloClick = (e: React.MouseEvent) => {
@@ -96,19 +96,9 @@ export const VideoCard: React.FC<VideoCardProps> = ({
         )}
       </div>
 
-      {/* Video Content & Metadata */}
-      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between bg-stone-900 text-white">
-        <div>
-          <h3 className="text-sm sm:text-base font-serif font-bold text-white group-hover:text-amber-300 transition-colors line-clamp-2 mb-1.5">
-            {video.title}
-          </h3>
-          <p className="text-xs text-stone-300 line-clamp-2 leading-relaxed mb-4">
-            {video.description}
-          </p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2 pt-3 border-t border-white/10">
+      {/* Action Buttons */}
+      <div className="p-3.5 bg-stone-900 text-white">
+        <div className="flex items-center gap-2">
           {/* Zalo Quote Button */}
           <button
             type="button"

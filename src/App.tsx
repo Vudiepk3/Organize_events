@@ -7,42 +7,21 @@ import React, { useState, useMemo } from 'react';
 import { Header } from './components/Header';
 import { MainMarqueeScreen } from './components/MainMarqueeScreen';
 import { LightboxModal } from './components/LightboxModal';
-import { EditBrandModal } from './components/EditBrandModal';
 import { Footer } from './components/Footer';
 import { FallingPetals } from './components/FallingPetals';
 import { WeddingMusicPlayer } from './components/WeddingMusicPlayer';
-import { DEFAULT_BRAND_INFO } from './data/initialPhotos';
-import { loadPhotosFromDirectory } from './utils/loadImagesFromDirectory';
+import { SITE_BRAND_INFO } from './config/siteConfig';
+import { getWeddingPhotos } from './utils/loadPhotos';
 import { getWeddingVideos } from './utils/loadVideos';
 import { MarqueeBrandInfo, MarqueeCategory, WeddingPhoto } from './types/wedding';
 
 export default function App() {
-  // Brand info state
-  const [brandInfo, setBrandInfo] = useState<MarqueeBrandInfo>(() => {
-    try {
-      const saved = localStorage.getItem('wedding_marquee_brand_info');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return {
-          ...parsed,
-          brandName: 'Nhà Rạp Sơn Nụ',
-          tiktokUrl: 'https://www.tiktok.com/@nharapsonnu',
-          tiktokHandle: '@nharapsonnu',
-          hotline: '0965.252.888',
-          zalo: '0965252888',
-          address: 'Xã Bản Lầu, Tỉnh Lào Cai',
-          serviceAreas: ['Bắc Hà', 'Mường Mương', "Bát Xát", 'Bảo Thắng', 'Si Ma Cai', 'TP. Lào Cai'],
-        };
-      }
-      return DEFAULT_BRAND_INFO;
-    } catch {
-      return DEFAULT_BRAND_INFO;
-    }
-  });
+  // Brand info state - lấy trực tiếp từ src/config/siteConfig.ts làm nguồn cấu hình duy nhất
+  const [brandInfo] = useState<MarqueeBrandInfo>(SITE_BRAND_INFO);
 
-  // Automatically read directory and derive image paths & metadata
-  const directoryPhotos = useMemo(() => {
-    return loadPhotosFromDirectory();
+  // Đọc danh sách ảnh trực tiếp từ JSON URL để tăng tốc độ hiển thị và giảm lag
+  const photos = useMemo(() => {
+    return getWeddingPhotos();
   }, []);
 
   // Read local video directory or fallback to TikTok/YouTube marquee videos
@@ -61,17 +40,6 @@ export default function App() {
 
   // Modals state
   const [lightboxPhoto, setLightboxPhoto] = useState<WeddingPhoto | null>(null);
-  const [isEditBrandOpen, setIsEditBrandOpen] = useState(false);
-
-  // Persist brand info
-  const handleSaveBrandInfo = (updated: MarqueeBrandInfo) => {
-    setBrandInfo(updated);
-    try {
-      localStorage.setItem('wedding_marquee_brand_info', JSON.stringify(updated));
-    } catch (e) {
-      console.error('Failed to save to localStorage', e);
-    }
-  };
 
   const cleanZaloPhone = brandInfo.zalo.replace(/\D/g, '') || brandInfo.hotline.replace(/\D/g, '');
   const generalZaloUrl = `https://zalo.me/${cleanZaloPhone}`;
@@ -81,20 +49,19 @@ export default function App() {
       {/* Romantic Falling Petals Effect */}
       <FallingPetals enabled={petalsEnabled} />
 
-      {/* Top Bar Header with Marquee Brand Name & TikTok Profile Redirect */}
+      {/* Top Bar Header with Marquee Brand Name & Controls */}
       <Header
         brandInfo={brandInfo}
         petalsEnabled={petalsEnabled}
         onTogglePetals={() => setPetalsEnabled(!petalsEnabled)}
         musicPlaying={musicPlaying}
         onToggleMusic={() => setMusicPlaying(!musicPlaying)}
-        onOpenEditBrand={() => setIsEditBrandOpen(true)}
       />
 
       {/* Main Screen: Showing All Marquee Models (Rạp Đám Cưới, Rạp Ăn Hỏi) */}
       <div className="flex-1">
         <MainMarqueeScreen
-          photos={directoryPhotos}
+          photos={photos}
           videos={weddingVideos}
           brandInfo={brandInfo}
           selectedCategory={selectedCategory}
@@ -103,11 +70,8 @@ export default function App() {
         />
       </div>
 
-      {/* Footer */}
-      <Footer
-        brandInfo={brandInfo}
-        onOpenEditBrand={() => setIsEditBrandOpen(true)}
-      />
+      {/* Footer (Đã xóa nút Cài đặt thông tin theo yêu cầu) */}
+      <Footer brandInfo={brandInfo} />
 
       {/* Background Wedding Music Audio Engine */}
       <WeddingMusicPlayer
@@ -149,18 +113,10 @@ export default function App() {
       {/* Lightbox Modal with Full-size Zoom & Zalo Intent */}
       <LightboxModal
         photo={lightboxPhoto}
-        photos={directoryPhotos}
+        photos={photos}
         brandInfo={brandInfo}
         onClose={() => setLightboxPhoto(null)}
         onSelectPhoto={(p) => setLightboxPhoto(p)}
-      />
-
-      {/* Edit Brand & TikTok Modal */}
-      <EditBrandModal
-        isOpen={isEditBrandOpen}
-        onClose={() => setIsEditBrandOpen(false)}
-        brandInfo={brandInfo}
-        onSave={handleSaveBrandInfo}
       />
     </div>
   );
