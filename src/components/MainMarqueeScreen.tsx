@@ -35,8 +35,8 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
   const weddingCount = photos.filter((p) => p.category === 'dam-cuoi').length;
   const engagementCount = photos.filter((p) => p.category === 'an-hoi').length;
 
-  const serviceAreas = brandInfo.serviceAreas && brandInfo.serviceAreas.length > 0 
-    ? brandInfo.serviceAreas 
+  const serviceAreas = brandInfo.serviceAreas && brandInfo.serviceAreas.length > 0
+    ? brandInfo.serviceAreas
     : ['Bắc Hà', 'Mường Mương', 'Bảo Thắng', 'Si Ma Cai', 'TP. Lào Cai'];
 
   const handleSelectVideoFromGrid = (index: number) => {
@@ -111,9 +111,6 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
                   <span>{area}</span>
                 </span>
               ))}
-              <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-100/80 text-amber-900 border border-amber-300 flex items-center gap-1">
-                <span>Khảo sát mặt bằng miễn phí</span>
-              </span>
             </div>
           </div>
         </div>
@@ -124,18 +121,16 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
             <button
               type="button"
               onClick={() => setActiveMainTab('photos')}
-              className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
-                activeMainTab === 'photos'
-                  ? 'bg-amber-600 text-white shadow-md shadow-amber-900/20 ring-1 ring-amber-400'
-                  : 'text-stone-700 hover:text-stone-950 hover:bg-white/60'
-              }`}
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${activeMainTab === 'photos'
+                ? 'bg-amber-600 text-white shadow-md shadow-amber-900/20 ring-1 ring-amber-400'
+                : 'text-stone-700 hover:text-stone-950 hover:bg-white/60'
+                }`}
             >
               <Sparkles className="w-4 h-4 text-amber-200 shrink-0" />
               <span className="truncate">Mẫu Rạp Cưới</span>
               <span
-                className={`px-2 py-0.5 rounded-full text-[11px] font-mono shrink-0 ${
-                  activeMainTab === 'photos' ? 'bg-black/25 text-white' : 'bg-stone-300/80 text-stone-700'
-                }`}
+                className={`px-2 py-0.5 rounded-full text-[11px] font-mono shrink-0 ${activeMainTab === 'photos' ? 'bg-black/25 text-white' : 'bg-stone-300/80 text-stone-700'
+                  }`}
               >
                 {photos.length}
               </span>
@@ -144,11 +139,10 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
             <button
               type="button"
               onClick={() => setActiveMainTab('videos')}
-              className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
-                activeMainTab === 'videos'
-                  ? 'bg-stone-900 text-white shadow-md shadow-black/25 ring-1 ring-stone-700'
-                  : 'text-stone-700 hover:text-stone-950 hover:bg-white/60'
-              }`}
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${activeMainTab === 'videos'
+                ? 'bg-stone-900 text-white shadow-md shadow-black/25 ring-1 ring-stone-700'
+                : 'text-stone-700 hover:text-stone-950 hover:bg-white/60'
+                }`}
             >
               <Video className="w-4 h-4 text-amber-400 shrink-0" />
               <span className="truncate">Video Thực Tế</span>
@@ -166,33 +160,30 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
             <div className="grid grid-cols-3 gap-1 p-1 bg-stone-100 rounded-2xl border border-stone-200/90 shadow-xs">
               <button
                 onClick={() => onSelectCategory('all')}
-                className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${
-                  selectedCategory === 'all'
-                    ? 'bg-stone-900 text-white shadow-md'
-                    : 'text-stone-600 hover:text-stone-900'
-                }`}
+                className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${selectedCategory === 'all'
+                  ? 'bg-stone-900 text-white shadow-md'
+                  : 'text-stone-600 hover:text-stone-900'
+                  }`}
               >
                 Tất Cả ({photos.length})
               </button>
 
               <button
                 onClick={() => onSelectCategory('dam-cuoi')}
-                className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${
-                  selectedCategory === 'dam-cuoi'
-                    ? 'bg-amber-700 text-white shadow-md'
-                    : 'text-stone-600 hover:text-stone-900'
-                }`}
+                className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${selectedCategory === 'dam-cuoi'
+                  ? 'bg-amber-700 text-white shadow-md'
+                  : 'text-stone-600 hover:text-stone-900'
+                  }`}
               >
                 Rạp Cưới ({weddingCount})
               </button>
 
               <button
                 onClick={() => onSelectCategory('an-hoi')}
-                className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${
-                  selectedCategory === 'an-hoi'
-                    ? 'bg-rose-700 text-white shadow-md'
-                    : 'text-stone-600 hover:text-stone-900'
-                }`}
+                className={`py-2 px-1 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer text-center truncate ${selectedCategory === 'an-hoi'
+                  ? 'bg-rose-700 text-white shadow-md'
+                  : 'text-stone-600 hover:text-stone-900'
+                  }`}
               >
                 Rạp Ăn Hỏi ({engagementCount})
               </button>
@@ -204,7 +195,7 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
       {/* ===================== TAB 1 CONTENT: PHOTOS GRID ===================== */}
       {activeMainTab === 'photos' && (
         <section aria-label="Danh sách mẫu rạp cưới và ăn hỏi" className="animate-fadeIn">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
             {filteredPhotos.map((photo) => (
               <PhotoCard
                 key={photo.id}

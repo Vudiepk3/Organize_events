@@ -31,7 +31,7 @@ export default function App() {
           hotline: '0965.252.888',
           zalo: '0965252888',
           address: 'Xã Bản Lầu, Tỉnh Lào Cai',
-          serviceAreas: ['Bắc Hà', 'Mường Mương', 'Bảo Thắng', 'Si Ma Cai', 'TP. Lào Cai'],
+          serviceAreas: ['Bắc Hà', 'Mường Mương', "Bát Xát", 'Bảo Thắng', 'Si Ma Cai', 'TP. Lào Cai'],
         };
       }
       return DEFAULT_BRAND_INFO;
