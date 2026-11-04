@@ -14,6 +14,7 @@ import { MarqueeBrandInfo } from '../types/wedding';
 // 1. DANH SÁCH CÁC HUYỆN / KHU VỰC PHỤC VỤ (CHỈ CẦN SỬA Ở ĐÂY LÀ ĐỦ):
 export const SERVICE_AREAS: string[] = [
   'Bắc Hà',
+  'Bát Xát',
   'Mường Mương',
   'Bảo Thắng',
   'Si Ma Cai',
