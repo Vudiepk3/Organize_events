@@ -35,8 +35,8 @@ export default function App() {
   // Falling petals animation toggle
   const [petalsEnabled, setPetalsEnabled] = useState<boolean>(true);
 
-  // Background wedding music state
-  const [musicPlaying, setMusicPlaying] = useState<boolean>(false);
+  // Background wedding music state - Mặc định BẬT khi vừa vào web
+  const [musicPlaying, setMusicPlaying] = useState<boolean>(true);
 
   // Modals state
   const [lightboxPhoto, setLightboxPhoto] = useState<WeddingPhoto | null>(null);

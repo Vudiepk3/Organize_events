@@ -36,6 +36,7 @@ export const SITE_BRAND_INFO: MarqueeBrandInfo = {
   serviceAreas: SERVICE_AREAS,
   experienceYears: 12,
   completedWeddings: 1850,
+  websiteUrl: 'https://nharapsonnu.io.vn',
 };
 
 // Tương thích ngược với các file import DEFAULT_BRAND_INFO

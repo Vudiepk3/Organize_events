@@ -8,6 +8,7 @@ interface WeddingMusicPlayerProps {
 export const WeddingMusicPlayer: React.FC<WeddingMusicPlayerProps> = ({
   isPlaying,
 }) => {
+  const audioElemRef = useRef<HTMLAudioElement | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const timerRef = useRef<any>(null);
   const isPlayingRef = useRef<boolean>(isPlaying);
@@ -16,17 +17,96 @@ export const WeddingMusicPlayer: React.FC<WeddingMusicPlayerProps> = ({
     isPlayingRef.current = isPlaying;
   }, [isPlaying]);
 
-  // Web Audio Synthesizer for Romantic Canon in D Wedding Chords & Melody
-  // Guaranteed to work hermetically in all browsers with zero external network dependency!
+  // Danh sách các tên file MP3 dự phòng trong thư mục public/
+  const AUDIO_SOURCES = ['/wedding.mp3', '/wedding.mp3.mp3', '/music.mp3'];
+
   useEffect(() => {
-    if (!isPlaying) {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-      return;
+    let sourceIndex = 0;
+
+    if (!audioElemRef.current) {
+      const audio = new Audio();
+      audio.src = AUDIO_SOURCES[0];
+      audio.loop = true;
+      audio.preload = 'auto';
+      audio.volume = 0.7;
+
+      // Nếu file đầu tiên bị lỗi (ví dụ Windows lưu nhầm wedding.mp3.mp3), tự thử nguồn kế tiếp
+      audio.onerror = () => {
+        if (sourceIndex < AUDIO_SOURCES.length - 1) {
+          sourceIndex++;
+          audio.src = AUDIO_SOURCES[sourceIndex];
+          if (isPlayingRef.current) {
+            audio.play().catch(() => {});
+          }
+        } else {
+          // Nếu không tìm thấy file nào trong public/, dùng synthesizer dự phòng
+          if (isPlayingRef.current) {
+            startSynthesizer();
+          }
+        }
+      };
+
+      audioElemRef.current = audio;
     }
 
+    const audio = audioElemRef.current;
+
+    const tryPlayAudio = () => {
+      if (!audio || !isPlayingRef.current) return;
+      
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            stopSynthesizer();
+          })
+          .catch((err) => {
+            // Trình duyệt chặn autoplay do chính sách người dùng chưa tương tác (NotAllowedError)
+            if (err.name === 'NotAllowedError' || err.name === 'AbortError') {
+              // Lắng nghe tương tác đầu tiên của người dùng để phát ngay
+              const unlockAudio = () => {
+                if (isPlayingRef.current && audio) {
+                  audio.play().catch(() => {});
+                }
+                window.removeEventListener('click', unlockAudio);
+                window.removeEventListener('touchstart', unlockAudio);
+                window.removeEventListener('scroll', unlockAudio);
+                window.removeEventListener('keydown', unlockAudio);
+              };
+
+              window.addEventListener('click', unlockAudio, { once: true, passive: true });
+              window.addEventListener('touchstart', unlockAudio, { once: true, passive: true });
+              window.addEventListener('scroll', unlockAudio, { once: true, passive: true });
+              window.addEventListener('keydown', unlockAudio, { once: true, passive: true });
+            } else {
+              // Lỗi định dạng hoặc 404, thử synthesizer
+              startSynthesizer();
+            }
+          });
+      }
+    };
+
+    if (isPlaying) {
+      tryPlayAudio();
+    } else {
+      audio.pause();
+      stopSynthesizer();
+    }
+
+    return () => {
+      audio.pause();
+      stopSynthesizer();
+    };
+  }, [isPlaying]);
+
+  const stopSynthesizer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  const startSynthesizer = () => {
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
       if (!audioCtxRef.current) {
@@ -108,14 +188,7 @@ export const WeddingMusicPlayer: React.FC<WeddingMusicPlayerProps> = ({
     } catch (e) {
       console.warn('Web Audio playback error', e);
     }
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-    };
-  }, [isPlaying]);
+  };
 
   // Headless audio component: doesn't block or cover any footer text!
   return null;

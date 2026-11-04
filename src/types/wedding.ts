@@ -37,4 +37,5 @@ export interface MarqueeBrandInfo {
   serviceAreas: string[];
   experienceYears: number;
   completedWeddings: number;
+  websiteUrl?: string;
 }

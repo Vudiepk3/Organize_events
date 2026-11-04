@@ -252,47 +252,59 @@ export const MainMarqueeScreen: React.FC<MainMarqueeScreenProps> = ({
       {/* ===================== TAB 2 CONTENT: VIDEO THỰC TẾ ===================== */}
       {activeMainTab === 'videos' && (
         <section aria-label="Video thực tế thi công rạp cưới" className="animate-fadeIn">
-          {/* Main Cinema Video Showcase with 2 side buttons */}
-          <div id="cinema-video-player">
-            <VideoShowcase
-              videos={videos}
-              brandInfo={brandInfo}
-              selectedIndex={selectedVideoIndex}
-              onSelectVideo={setSelectedVideoIndex}
-            />
-          </div>
-
-          {/* List of Real Videos (Grid Layout like the Photos in Tab 1) */}
-          <div className="mt-8 pt-8 border-t border-[#EADFD5]">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
-              <div>
-                <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-amber-800 mb-1.5 bg-amber-50 px-3 py-1 rounded-full border border-amber-200/60">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Bộ Sưu Tập Video Thi Công</span>
-                </div>
-                <h2 className="text-xl sm:text-2xl font-serif font-bold text-stone-900">
-                  Danh Sách Tất Cả Video Thực Tế ({videos.length})
-                </h2>
-                <p className="text-xs sm:text-sm text-stone-500 mt-1">
-                  Chạm vào bất kỳ video nào dưới đây để phát trên màn hình lớn hoặc bấm nút Báo Giá qua Zalo
-                </p>
-              </div>
-            </div>
-
-            {/* Video Cards Grid matching the 3-column layout of the Photos Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
-              {videos.map((vid, idx) => (
-                <VideoCard
-                  key={vid.id || idx}
-                  video={vid}
-                  index={idx}
-                  isActive={idx === selectedVideoIndex}
-                  zaloPhone={brandInfo.zalo || brandInfo.hotline}
-                  onSelectVideo={handleSelectVideoFromGrid}
+          {videos && videos.length > 0 ? (
+            <>
+              {/* Main Cinema Video Showcase with 2 side buttons */}
+              <div id="cinema-video-player">
+                <VideoShowcase
+                  videos={videos}
+                  brandInfo={brandInfo}
+                  selectedIndex={selectedVideoIndex}
+                  onSelectVideo={setSelectedVideoIndex}
                 />
-              ))}
+              </div>
+
+              {/* List of Real Videos (Grid Layout like the Photos in Tab 1) */}
+              <div className="mt-8 pt-8 border-t border-[#EADFD5]">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
+                  <div>
+                    <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-amber-800 mb-1.5 bg-amber-50 px-3 py-1 rounded-full border border-amber-200/60">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Bộ Sưu Tập Video Thi Công</span>
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-serif font-bold text-stone-900">
+                      Danh Sách Tất Cả Video Thực Tế ({videos.length})
+                    </h2>
+                    <p className="text-xs sm:text-sm text-stone-500 mt-1">
+                      Chạm vào bất kỳ video nào dưới đây để phát trên màn hình lớn hoặc bấm nút Báo Giá qua Zalo
+                    </p>
+                  </div>
+                </div>
+
+                {/* Video Cards Grid matching the 3-column layout of the Photos Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
+                  {videos.map((vid, idx) => (
+                    <VideoCard
+                      key={vid.id || idx}
+                      video={vid}
+                      index={idx}
+                      isActive={idx === selectedVideoIndex}
+                      zaloPhone={brandInfo.zalo || brandInfo.hotline}
+                      onSelectVideo={handleSelectVideoFromGrid}
+                    />
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-16 bg-white rounded-2xl border border-stone-200 shadow-sm">
+              <Video className="w-12 h-12 text-stone-300 mx-auto mb-3" />
+              <h3 className="text-base font-bold text-stone-800 mb-1">Hiện chưa có video thực tế</h3>
+              <p className="text-stone-500 text-sm max-w-md mx-auto">
+                Các video công trình đang được cập nhật. Bạn có thể thêm file video (.mp4) vào thư mục <code className="bg-stone-100 px-1.5 py-0.5 rounded text-amber-800 font-mono text-xs">src/assets/videos/</code> hoặc xem các mẫu rạp ở Tab 1.
+              </p>
             </div>
-          </div>
+          )}
         </section>
       )}
     </main>
