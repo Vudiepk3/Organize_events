@@ -89,7 +89,7 @@ export default function App() {
       {/* Background Wedding Music Audio Engine */}
       <WeddingMusicPlayer
         isPlaying={musicPlaying}
-        onPlayStateChange={setMusicPlaying}
+        setIsPlaying={setMusicPlaying}
       />
 
       {/* Floating Action Bar on Right (TikTok + Zalo Intent) */}
