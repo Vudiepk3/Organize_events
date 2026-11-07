@@ -48,8 +48,8 @@ export default function App() {
   // Falling petals animation toggle
   const [petalsEnabled, setPetalsEnabled] = useState<boolean>(true);
 
-  // Background wedding music state - Mặc định BẬT khi vừa vào web
-  const [musicPlaying, setMusicPlaying] = useState<boolean>(true);
+  // Background wedding music state - theo dõi chính xác trạng thái âm thanh THỰC TẾ
+  const [musicPlaying, setMusicPlaying] = useState<boolean>(false);
 
   // Modals state
   const [lightboxPhoto, setLightboxPhoto] = useState<WeddingPhoto | null>(null);
@@ -89,7 +89,7 @@ export default function App() {
       {/* Background Wedding Music Audio Engine */}
       <WeddingMusicPlayer
         isPlaying={musicPlaying}
-        onTogglePlay={() => setMusicPlaying(!musicPlaying)}
+        onPlayStateChange={setMusicPlaying}
       />
 
       {/* Floating Action Bar on Right (TikTok + Zalo Intent) */}
