@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
                 {brandInfo.brandName}
               </span>
               <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-amber-700 font-semibold truncate">
-                Bản Lầu · Lào Cai
+                {brandInfo.address || 'Bản Lầu · Lào Cai'}
               </span>
             </div>
           </a>
@@ -53,11 +53,11 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
           >
             <Disc className={`w-3.5 h-3.5 ${musicPlaying ? 'animate-spin text-amber-700' : 'text-stone-500'}`} style={{ animationDuration: '3s' }} />
-            <span className="whitespace-nowrap text-[11px] sm:text-xs">
-              {musicPlaying ? 'Nhạc' : 'Nhạc'}
+            <span className="whitespace-nowrap text-[11px] sm:text-xs font-semibold">
+              {musicPlaying ? 'Nhạc' : 'Bật Nhạc'}
             </span>
             {musicPlaying && (
-              <span className="flex items-end gap-0.5 h-2.5 ml-0.5">
+              <span className="flex items-end gap-0.5 h-2.5 ml-0.5" aria-hidden="true">
                 <span className="w-0.5 h-full bg-amber-600 rounded-full animate-bounce" style={{ animationDuration: '0.6s' }} />
                 <span className="w-0.5 h-2/3 bg-amber-500 rounded-full animate-bounce" style={{ animationDuration: '0.4s' }} />
               </span>

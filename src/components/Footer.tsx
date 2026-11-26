@@ -28,8 +28,17 @@ export const Footer: React.FC<FooterProps> = ({ brandInfo }) => {
             <span className="text-amber-300/90 font-medium">Phục vụ: {areas.join(' · ')}</span>
           </div>
 
-          <div className="text-stone-500 text-[11px] text-center md:text-right">
-            © {new Date().getFullYear()} {brandInfo.brandName} · Thiết kế & thi công rạp cưới trọn gói
+          <div className="flex items-center justify-center md:justify-end gap-3 text-stone-500 text-[11px]">
+            <span>© {new Date().getFullYear()} {brandInfo.brandName} · Thiết kế & thi công rạp cưới trọn gói</span>
+            <span aria-hidden="true">·</span>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium transition-colors cursor-pointer"
+              title="Cuộn mượt lên đầu trang"
+            >
+              <span>Lên đầu trang</span>
+              <span aria-hidden="true">↑</span>
+            </button>
           </div>
         </div>
       </div>

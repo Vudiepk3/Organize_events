@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Video, Sparkles, MapPin, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Video, Sparkles, ExternalLink } from 'lucide-react';
 import { WeddingVideo } from '../utils/loadVideos';
 import { MarqueeBrandInfo } from '../types/wedding';
 import { SERVICE_AREAS } from '../config/siteConfig';
@@ -158,26 +158,26 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
                 <Sparkles className="w-3 h-3 text-amber-400" />
                 Video #{currentIndex + 1}
               </span>
-              <span className="text-xs text-stone-300 flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                {currentVideo.location || 'Lào Cai'}
-              </span>
             </div>
 
-            {/* Quick Switch Dots & Instruction */}
+            {/* Quick Switch Buttons & Instruction */}
             <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 mb-5">
-              <div className="flex items-center justify-between text-xs mb-2">
+              <div className="flex items-center justify-between text-xs mb-2.5">
                 <span className="text-stone-300 font-medium">Chuyển đổi video:</span>
                 <span className="text-amber-400 font-semibold">{currentIndex + 1} / {videos.length}</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className={`grid gap-1.5 ${
+                videos.length <= 4 
+                  ? 'grid-cols-2 sm:grid-cols-4' 
+                  : 'grid-cols-4'
+              }`}>
                 {videos.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => updateIndex(idx)}
-                    className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                    className={`py-2 px-1 rounded-lg text-xs font-semibold transition-all cursor-pointer text-center truncate ${
                       idx === currentIndex
-                        ? 'bg-amber-500 text-stone-950 font-bold shadow-md shadow-amber-500/30'
+                        ? 'bg-amber-500 text-stone-950 font-bold shadow-md shadow-amber-500/30 ring-1 ring-amber-300'
                         : 'bg-white/10 text-stone-300 hover:bg-white/20'
                     }`}
                     title={`Chuyển sang Video ${idx + 1}`}
@@ -186,7 +186,7 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({
                   </button>
                 ))}
               </div>
-              <p className="text-[11px] text-stone-400 mt-2 text-center">
+              <p className="text-[11px] text-stone-400 mt-2.5 text-center">
                 Bấm 2 nút mũi tên ở 2 bên video để lướt xem nhanh
               </p>
             </div>

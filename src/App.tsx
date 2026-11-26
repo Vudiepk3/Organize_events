@@ -19,6 +19,19 @@ export default function App() {
   // Brand info state - lấy trực tiếp từ src/config/siteConfig.ts làm nguồn cấu hình duy nhất
   const [brandInfo] = useState<MarqueeBrandInfo>(SITE_BRAND_INFO);
 
+  // Tự động đồng bộ tiêu đề trang web và thẻ meta khi danh sách địa điểm thay đổi
+  React.useEffect(() => {
+    const areasStr = (brandInfo.serviceAreas || []).join(', ');
+    document.title = `${brandInfo.brandName} - Rạp Cưới & Ăn Hỏi (${areasStr})`;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        `${brandInfo.brandName} tại ${brandInfo.address}. Chuyên thi công rạp đám cưới, rạp ăn hỏi tại ${areasStr}. Hotline/Zalo: ${brandInfo.hotline}.`
+      );
+    }
+  }, [brandInfo]);
+
   // Đọc danh sách ảnh trực tiếp từ JSON URL để tăng tốc độ hiển thị và giảm lag
   const photos = useMemo(() => {
     return getWeddingPhotos();
@@ -35,8 +48,8 @@ export default function App() {
   // Falling petals animation toggle
   const [petalsEnabled, setPetalsEnabled] = useState<boolean>(true);
 
-  // Background wedding music state - Mặc định BẬT khi vừa vào web
-  const [musicPlaying, setMusicPlaying] = useState<boolean>(true);
+  // Background wedding music state - theo dõi chính xác trạng thái âm thanh THỰC TẾ
+  const [musicPlaying, setMusicPlaying] = useState<boolean>(false);
 
   // Modals state
   const [lightboxPhoto, setLightboxPhoto] = useState<WeddingPhoto | null>(null);
@@ -76,7 +89,7 @@ export default function App() {
       {/* Background Wedding Music Audio Engine */}
       <WeddingMusicPlayer
         isPlaying={musicPlaying}
-        onTogglePlay={() => setMusicPlaying(!musicPlaying)}
+        setIsPlaying={setMusicPlaying}
       />
 
       {/* Floating Action Bar on Right (TikTok + Zalo Intent) */}
